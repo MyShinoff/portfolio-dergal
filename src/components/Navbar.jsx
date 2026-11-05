@@ -1,4 +1,4 @@
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Code2, Mail, MapPin, Menu, X } from 'lucide-react'
 import gsap from 'gsap'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
@@ -7,6 +7,11 @@ const links = [
   { label: 'Projets', href: '#projets' },
   { label: 'À propos', href: '#apropos' },
   { label: 'Contact', href: '#contact' },
+]
+
+const socials = [
+  { label: 'GitHub', href: 'https://github.com', icon: Code2 },
+  { label: 'Email', href: 'mailto:contact@example.com', icon: Mail },
 ]
 
 export default function Navbar() {
@@ -40,11 +45,18 @@ export default function Navbar() {
       )
       gsap.from('[data-menu-link]', {
         opacity: 0,
-        y: 24,
-        duration: 0.45,
+        y: 32,
+        duration: 0.5,
         ease: 'power3.out',
-        stagger: 0.06,
+        stagger: 0.07,
         delay: 0.08,
+      })
+      gsap.from('[data-menu-meta]', {
+        opacity: 0,
+        y: 20,
+        duration: 0.5,
+        ease: 'power3.out',
+        delay: 0.35,
       })
     })
 
@@ -67,71 +79,90 @@ export default function Navbar() {
           />
         </a>
 
-        {/* Liens desktop (gauche) */}
-        <ul className="hidden items-center gap-8 text-sm text-neutral-400 md:flex">
-          {links.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="transition-colors hover:text-white"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* CTA desktop (droite) */}
-        <a
-          href="#contact"
-          className="ml-auto hidden items-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-medium text-neutral-950 transition-transform hover:-translate-y-0.5 md:inline-flex"
-        >
-          Travaillons ensemble
-          <ArrowUpRight size={16} />
-        </a>
-
-        {/* Hamburger (mobile) */}
+        {/* Hamburger (mobile + desktop) */}
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
-          className="ml-auto text-neutral-200 transition-colors hover:text-white md:hidden"
+          className="ml-auto flex items-center gap-2 text-sm text-neutral-200 transition-colors hover:text-white"
         >
+          <span className="hidden sm:inline">
+            {open ? 'Fermer' : 'Menu'}
+          </span>
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
 
-      {/* Menu mobile */}
+      {/* Menu plein écran */}
       {open && (
         <div
           ref={panelRef}
-          className="fixed inset-x-0 top-16 bottom-0 flex flex-col gap-2 bg-neutral-950 px-6 py-10 md:hidden"
+          className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-neutral-950"
         >
-          <ul className="flex flex-col gap-4">
-            {links.map((link) => (
-              <li key={link.href}>
-                <a
-                  data-menu-link
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block text-3xl font-medium tracking-tight text-neutral-100 transition-colors hover:text-neutral-400"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="mx-auto flex h-full max-w-6xl flex-col gap-12 px-6 py-12 md:flex-row md:items-center md:justify-between md:gap-20 md:py-16">
+            {/* Liens */}
+            <ul className="flex flex-col gap-4 md:gap-6">
+              {links.map((link, index) => (
+                <li key={link.href}>
+                  <a
+                    data-menu-link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="group flex items-baseline gap-4 text-4xl font-medium tracking-tight text-neutral-100 transition-colors hover:text-neutral-400 sm:text-6xl"
+                  >
+                    <span className="text-xs font-normal text-neutral-500 sm:text-sm">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
 
-          <a
-            data-menu-link
-            href="#contact"
-            onClick={() => setOpen(false)}
-            className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-neutral-950"
-          >
-            Travaillons ensemble
-            <ArrowUpRight size={18} />
-          </a>
+            {/* Colonne infos (desktop) */}
+            <div
+              data-menu-meta
+              className="flex flex-col gap-8 text-sm text-neutral-400 md:items-end md:text-right"
+            >
+              <ul className="flex flex-col gap-3">
+                <li className="flex items-center gap-2">
+                  <MapPin size={16} className="text-neutral-500" />
+                  Disponible à distance
+                </li>
+                <li className="flex items-center gap-2">
+                  <Mail size={16} className="text-neutral-500" />
+                  contact@example.com
+                </li>
+              </ul>
+
+              <ul className="flex items-center gap-5">
+                {socials.map(({ label, href, icon: Icon }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 transition-colors hover:text-white"
+                    >
+                      <Icon size={16} />
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                data-menu-link
+                href="#contact"
+                onClick={() => setOpen(false)}
+                className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-neutral-950 transition-transform hover:-translate-y-0.5"
+              >
+                Travaillons ensemble
+                <ArrowUpRight size={18} />
+              </a>
+            </div>
+          </div>
         </div>
       )}
     </header>
