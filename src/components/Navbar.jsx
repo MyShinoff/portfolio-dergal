@@ -64,8 +64,9 @@ export default function Navbar() {
   }, [open])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-neutral-950/90 backdrop-blur-md">
-      <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 bg-neutral-950/90 backdrop-blur-md">
+        <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo centré */}
         <a
           href="#accueil"
@@ -92,15 +93,17 @@ export default function Navbar() {
           </span>
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </nav>
+        </nav>
+      </header>
 
-      {/* Menu plein écran */}
+      {/* Menu plein écran — hors du header : backdrop-blur créerait une
+          boîte de contenu qui annule la hauteur d'un élément fixed */}
       {open && (
         <div
           ref={panelRef}
-          className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-neutral-950"
+          className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-neutral-950"
         >
-          <div className="mx-auto flex h-full max-w-6xl flex-col gap-12 px-6 py-12 md:flex-row md:items-center md:justify-between md:gap-20 md:py-16">
+          <div className="mx-auto flex min-h-full max-w-6xl flex-col gap-12 px-6 py-12 md:flex-row md:items-center md:justify-between md:gap-20 md:py-16">
             {/* Liens */}
             <ul className="flex flex-col gap-4 md:gap-6">
               {links.map((link, index) => (
@@ -165,6 +168,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-    </header>
+    </>
   )
 }

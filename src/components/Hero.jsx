@@ -33,14 +33,6 @@ export default function Hero() {
       className="flex min-h-screen flex-col justify-center px-6 pt-16"
     >
       <div className="mx-auto w-full max-w-6xl">
-        <p
-          data-hero-fade
-          className="mb-6 flex items-center gap-2 text-sm text-neutral-400"
-        >
-          <span className="size-2 rounded-full bg-emerald-400" />
-          Disponible pour de nouveaux projets
-        </p>
-
         <h1 className="text-5xl font-medium leading-[1.05] tracking-tight text-balance sm:text-7xl lg:text-8xl">
           {['Développeur &', 'créateur d’expériences', 'web mémorables.'].map(
             (line) => (
