@@ -106,17 +106,14 @@ export default function Navbar() {
           <div className="mx-auto flex min-h-full max-w-6xl flex-col gap-12 px-6 py-12 md:flex-row md:items-center md:justify-between md:gap-20 md:py-16">
             {/* Liens */}
             <ul className="flex flex-col gap-4 md:gap-6">
-              {links.map((link, index) => (
+              {links.map((link) => (
                 <li key={link.href}>
                   <a
                     data-menu-link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="group flex items-baseline gap-4 text-4xl font-medium tracking-tight text-neutral-100 transition-colors hover:text-neutral-400 sm:text-6xl"
+                    className="block text-4xl font-medium tracking-tight text-neutral-100 transition-colors hover:text-neutral-400 sm:text-6xl"
                   >
-                    <span className="text-xs font-normal text-neutral-500 sm:text-sm">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
                     {link.label}
                   </a>
                 </li>
