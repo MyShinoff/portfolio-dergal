@@ -1,69 +1,92 @@
-import { ArrowDown } from 'lucide-react'
-import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLayoutEffect, useRef } from 'react'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
   const root = useRef(null)
 
   useLayoutEffect(() => {
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
     const ctx = gsap.context(() => {
-      gsap.from('[data-hero-line]', {
-        yPercent: 110,
-        duration: 1,
-        ease: 'power4.out',
-        stagger: 0.1,
-      })
-      gsap.from('[data-hero-fade]', {
+      if (!reduceMotion) {
+        // Entrée : le nom se lève derrière son masque, la photo apparaît
+        gsap.from('[data-title-inner]', {
+          yPercent: 115,
+          duration: 1.2,
+          ease: 'power4.out',
+          delay: 0.15,
+        })
+        gsap.from('[data-hero-photo]', {
+          opacity: 0,
+          scale: 0.94,
+          duration: 1.1,
+          ease: 'power3.out',
+          delay: 0.45,
+        })
+      }
+
+      // Scroll : le nom reste collé en haut puis s'efface…
+      gsap.to('[data-title]', {
         opacity: 0,
-        y: 24,
-        duration: 1,
-        ease: 'power3.out',
-        delay: 0.5,
-        stagger: 0.12,
+        yPercent: -35,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
+      })
+
+      // …pendant que la photo glisse par-dessus (parallax)
+      gsap.to('[data-hero-photo]', {
+        yPercent: 28,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
       })
     }, root)
+
+    // La hauteur du titre change une fois Switzer chargé
+    document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
     return () => ctx.revert()
   }, [])
 
   return (
-    <section
-      id="accueil"
-      ref={root}
-      className="flex min-h-screen flex-col justify-center px-6 pt-16"
-    >
-      <div className="mx-auto w-full max-w-6xl">
-        <h1 className="text-5xl font-medium leading-[1.05] tracking-tight text-balance sm:text-7xl lg:text-8xl">
-          {['Développeur &', 'créateur d’expériences', 'web mémorables.'].map(
-            (line) => (
-              <span key={line} className="block overflow-hidden">
-                <span data-hero-line className="block">
-                  {line}
-                </span>
-              </span>
-            ),
-          )}
-        </h1>
-
-        <div
-          data-hero-fade
-          className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
+    <section id="accueil" ref={root} className="relative min-h-screen">
+      {/* Nom géant — fixe derrière tout, comme sur zendaya.com */}
+      <div
+        data-title
+        className="pointer-events-none fixed -left-[8vw] -right-[8vw] top-[9vh] z-0 select-none overflow-hidden"
+      >
+        <h1
+          data-title-inner
+          className="whitespace-nowrap text-center text-[23vw] leading-[0.9] font-extrabold tracking-[-0.03em] text-white uppercase"
         >
-          <p className="max-w-md text-neutral-400">
-            Je conçois et développe des sites et interfaces rapides, soignés et
-            animés avec attention au détail.
-          </p>
-          <a
-            href="#projets"
-            className="group inline-flex w-fit items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm transition-colors hover:bg-white hover:text-neutral-950"
-          >
-            Voir mes projets
-            <ArrowDown
-              size={16}
-              className="transition-transform group-hover:translate-y-1"
-            />
-          </a>
-        </div>
+          Arturo
+        </h1>
+      </div>
+
+      {/* Contenu qui défile par-dessus le nom */}
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[13vh] pb-14 sm:pt-[26vh]">
+        <img
+          data-hero-photo
+          src="/arturo.jpeg"
+          alt="Arturo Dergal"
+          width="200"
+          height="200"
+          className="w-[min(84vw,500px)] select-none"
+        />
       </div>
     </section>
   )
