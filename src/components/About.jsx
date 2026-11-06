@@ -5,11 +5,12 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Séquence d'images de la scène « iMac G4 » (capture du rendu réel),
+ * Séquence d'images de la scène « iMac G4 » : le rendu réel de la scène,
+ * détouré (fond transparent) pour flotter directement dans le fond du site.
  * 24 frames = un tour complet de 360°, pilotées par le scroll.
  */
 const FRAMES = 24
-const frameSrc = (i) => `/frames/f${String(i).padStart(2, '0')}.jpg`
+const frameSrc = (i) => `/frames/imac-${String(i).padStart(2, '0')}.webp`
 
 /**
  * Option : accroche natif interactif (sans iframe) si une scène est publiée.
@@ -169,29 +170,29 @@ export default function About() {
           </ul>
         </div>
 
-        {/* Colonne 3D — séquence d'images native, zéro iframe */}
+        {/* Colonne 3D — l'iMac flotte dans le fond du site, sans cadre */}
         <div data-3d-card className="relative will-change-transform">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-            {SPLINE_URL && viewerReady ? (
+          {SPLINE_URL && viewerReady ? (
+            <div className="aspect-[4/3] w-full overflow-hidden">
               <spline-viewer
                 url={SPLINE_URL}
                 loading="lazy"
                 className="h-full w-full"
               />
-            ) : (
-              <img
-                ref={frameRef}
-                data-i="0"
-                src={frameSrc(0)}
-                alt="iMac G4 — scène 3D de @bonumdesign, tournée au scroll"
-                draggable={false}
-                loading="lazy"
-                className="h-full w-full object-cover select-none"
-              />
-            )}
-          </div>
+            </div>
+          ) : (
+            <img
+              ref={frameRef}
+              data-i="0"
+              src={frameSrc(0)}
+              alt="iMac G4 — scène 3D de @bonumdesign, tournée au scroll"
+              draggable={false}
+              loading="lazy"
+              className="w-full select-none"
+            />
+          )}
 
-          <p className="mt-3 text-xs text-neutral-500">
+          <p className="mt-4 text-xs text-neutral-500">
             <a
               href="https://community.spline.design/file/5c9408a8-d134-4d40-8384-f08b72ce0a6d"
               target="_blank"
