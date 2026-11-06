@@ -30,18 +30,22 @@ export default function Hero() {
         })
       }
 
-      // Scroll : le nom reste collé en haut puis s'efface…
-      gsap.to('[data-title]', {
-        opacity: 0,
-        yPercent: -35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.6,
+      // Scroll : le texte est coupé petit à petit par le bas vers le haut,
+      // comme les sections qui recouvrent le titre fixe sur zendaya.com
+      gsap.fromTo(
+        '[data-title]',
+        { clipPath: 'inset(0% 0% 0% 0%)' },
+        {
+          clipPath: 'inset(0% 0% 100% 0%)',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.4,
+          },
         },
-      })
+      )
 
       // …pendant que la photo glisse par-dessus (parallax)
       gsap.to('[data-hero-photo]', {
@@ -85,7 +89,7 @@ export default function Hero() {
           alt="Arturo Dergal"
           width="200"
           height="200"
-          className="w-[min(84vw,500px)] select-none"
+          className="w-[min(84vw,500px)] select-none rounded-2xl"
         />
       </div>
     </section>
