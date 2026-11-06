@@ -11,8 +11,8 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <Projects />
         <About />
+        <Projects />
         <Contact />
       </main>
       <Footer />
