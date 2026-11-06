@@ -5,16 +5,18 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * URL publiée de la scène (accroche natif, sans iframe).
- * Pour l'obtenir : ouvrir la scène dans Spline → Remix → Publish → copier l'URL.
+ * Séquence d'images de la scène « iMac G4 » (capture du rendu réel),
+ * 24 frames = un tour complet de 360°, pilotées par le scroll.
+ */
+const FRAMES = 24
+const frameSrc = (i) => `/frames/f${String(i).padStart(2, '0')}.jpg`
+
+/**
+ * Option : accroche natif interactif (sans iframe) si une scène est publiée.
+ * Spline → Remix → Export → Viewer → coller l'URL ici.
  * Ex. https://prod.spline.design/XXXX/scene.splinecode
- *
- * Tant qu'elle est vide, la scène s'affiche en iframe de repli.
  */
 const SPLINE_URL = ''
-
-const SCENE_IFRAME =
-  'https://app.spline.design/file/676da37a-9095-4b52-8a55-71ca4267571e?view=preview'
 
 const skills = [
   'React',
@@ -28,9 +30,10 @@ const skills = [
 
 export default function About() {
   const root = useRef(null)
+  const frameRef = useRef(null)
   const [viewerReady, setViewerReady] = useState(false)
 
-  // Le runtime Spline pèse ~1 Mo : on ne le charge que si une URL est publiée
+  // Option accroche natif : runtime chargé uniquement si une URL existe
   useEffect(() => {
     if (!SPLINE_URL) return
     let alive = true
@@ -39,6 +42,15 @@ export default function About() {
       .catch(() => {})
     return () => {
       alive = false
+    }
+  }, [])
+
+  // Préchargement des frames (352 Ko au total)
+  useEffect(() => {
+    if (SPLINE_URL) return
+    for (let i = 0; i < FRAMES; i++) {
+      const img = new Image()
+      img.src = frameSrc(i)
     }
   }, [])
 
@@ -64,8 +76,7 @@ export default function About() {
         },
       })
 
-      // Scène 3D : le scroll la fait entrer de biais puis la pose en face,
-      // collé 1:1 à la molette (aucune inertie à l'arrêt)
+      // La carte entre de biais puis se pose en face : collé 1:1 au scroll
       gsap.fromTo(
         '[data-3d-card]',
         {
@@ -89,6 +100,27 @@ export default function About() {
           },
         },
       )
+
+      // L'iMac tourne sur lui-même pendant que la carte se pose
+      if (!SPLINE_URL) {
+        ScrollTrigger.create({
+          trigger: root.current,
+          start: 'top 88%',
+          end: 'top 42%',
+          onUpdate: (self) => {
+            const img = frameRef.current
+            if (!img) return
+            const i = Math.min(
+              FRAMES - 1,
+              Math.round(self.progress * (FRAMES - 1)),
+            )
+            if (img.dataset.i !== String(i)) {
+              img.dataset.i = String(i)
+              img.src = frameSrc(i)
+            }
+          },
+        })
+      }
     }, root)
 
     return () => ctx.revert()
@@ -137,7 +169,7 @@ export default function About() {
           </ul>
         </div>
 
-        {/* Colonne 3D — accroche natif si URL publiée, iframe en repli */}
+        {/* Colonne 3D — séquence d'images native, zéro iframe */}
         <div data-3d-card className="relative will-change-transform">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5">
             {SPLINE_URL && viewerReady ? (
@@ -147,12 +179,14 @@ export default function About() {
                 className="h-full w-full"
               />
             ) : (
-              <iframe
-                src={SCENE_IFRAME}
-                title="iMac G4 — scène 3D par @bonumdesign"
+              <img
+                ref={frameRef}
+                data-i="0"
+                src={frameSrc(0)}
+                alt="iMac G4 — scène 3D de @bonumdesign, tournée au scroll"
+                draggable={false}
                 loading="lazy"
-                allow="fullscreen"
-                className="h-full w-full border-0"
+                className="h-full w-full object-cover select-none"
               />
             )}
           </div>
