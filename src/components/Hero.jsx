@@ -21,13 +21,18 @@ export default function Hero() {
           ease: 'power4.out',
           delay: 0.15,
         })
-        gsap.from('[data-hero-photo]', {
-          opacity: 0,
-          scale: 0.94,
-          duration: 1.1,
-          ease: 'power3.out',
-          delay: 0.45,
-        })
+        // La photo se dévoile de haut en bas (balayage) en tombant légèrement
+        gsap.fromTo(
+          '[data-hero-photo]',
+          { clipPath: 'inset(0% 0% 100% 0%)', y: -50 },
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            y: 0,
+            duration: 1.25,
+            ease: 'power3.out',
+            delay: 0.45,
+          },
+        )
       }
 
       // Scroll : le texte est coupé petit à petit par le bas vers le haut,
@@ -42,7 +47,7 @@ export default function Hero() {
             trigger: root.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 0.4,
+            scrub: 1,
           },
         },
       )
@@ -55,7 +60,7 @@ export default function Hero() {
           trigger: root.current,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.6,
+          scrub: 1,
         },
       })
     }, root)
