@@ -35,8 +35,8 @@ export default function Hero() {
         )
       }
 
-      // Scroll : le texte est coupé petit à petit par le bas vers le haut,
-      // comme les sections qui recouvrent le titre fixe sur zendaya.com
+      // Scroll : le texte est coupé petit à petit, collé 1:1 à la molette
+      // (scrub: true = aucune inertie, aucun rebond à l'arrêt)
       gsap.fromTo(
         '[data-title]',
         { clipPath: 'inset(0% 0% 0% 0%)' },
@@ -47,22 +47,13 @@ export default function Hero() {
             trigger: root.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: true,
           },
         },
       )
 
-      // …pendant que la photo glisse par-dessus (parallax)
-      gsap.to('[data-hero-photo]', {
-        yPercent: 28,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      })
+      // La photo défile naturellement avec la page (pas de parallax :
+      // c'était elle qui créait la sensation de résistance)
     }, root)
 
     // La hauteur du titre change une fois Switzer chargé

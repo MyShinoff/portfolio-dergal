@@ -65,7 +65,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 bg-neutral-950/90 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50 bg-neutral-950">
         <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo centré */}
         <a
