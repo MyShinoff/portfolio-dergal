@@ -78,14 +78,14 @@ export default function Hero() {
       </div>
 
       {/* Contenu qui défile par-dessus le nom */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[13vh] pb-14 sm:pt-[26vh]">
+      <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[9vh] pb-14 sm:pt-[12vh]">
         <img
           data-hero-photo
           src="/arturo.png"
           alt="Arturo Dergal"
           width="200"
           height="200"
-          className="w-[min(84vw,500px)] select-none rounded-2xl"
+          className="w-[min(96vw,880px)] select-none rounded-2xl"
         />
       </div>
     </section>
