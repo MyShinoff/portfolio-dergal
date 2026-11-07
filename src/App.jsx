@@ -10,8 +10,11 @@ export default function App() {
     <>
       <Navbar />
       <main>
-        <Hero />
-        <About />
+        {/* Hero épinglé + section qui passe par-dessus */}
+        <div className="relative">
+          <Hero />
+          <About />
+        </div>
         <Projects />
         <Contact />
       </main>

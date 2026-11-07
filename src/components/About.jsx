@@ -128,7 +128,17 @@ export default function About() {
   }, [])
 
   return (
-    <section id="apropos" ref={root} className="px-6 py-24 sm:py-32">
+    <section
+      id="apropos"
+      ref={root}
+      className="relative z-10 px-6 pt-30 pb-24 sm:pt-36 sm:pb-32"
+      style={{
+        // Bord supérieur qui se dissout : la section recouvre le hero sans
+        // jamais faire apparaître une coupure nette du PNG
+        backgroundImage:
+          'linear-gradient(to bottom, transparent 0px, var(--color-neutral-950) 100px)',
+      }}
+    >
       <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Colonne texte */}
         <div>

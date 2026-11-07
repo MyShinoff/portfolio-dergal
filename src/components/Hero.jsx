@@ -65,7 +65,11 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="accueil" ref={root} className="relative min-h-screen overflow-hidden">
+    <section
+      id="accueil"
+      ref={root}
+      className="sticky top-0 h-screen overflow-hidden"
+    >
       {/* Nom géant — fixe derrière tout, comme sur zendaya.com */}
       <div
         data-title
@@ -80,14 +84,14 @@ export default function Hero() {
       </div>
 
       {/* Contenu qui défile par-dessus le nom */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-24">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 py-24">
         <img
           data-hero-photo
           src="/arturo.png"
           alt="Arturo Dergal"
           width="200"
           height="200"
-          className="w-[min(115vw,880px)] max-w-none select-none rounded-2xl"
+          className="w-[min(115vw,90vh,880px)] max-w-none select-none rounded-2xl"
           style={{
             // Le bas du détourage se dissout dans le fond : plus de coupure nette
             maskImage:
