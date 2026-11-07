@@ -81,7 +81,7 @@ export default function Hero() {
       <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[13vh] pb-14 sm:pt-[26vh]">
         <img
           data-hero-photo
-          src="/arturo.jpeg"
+          src="/arturo.png"
           alt="Arturo Dergal"
           width="200"
           height="200"
