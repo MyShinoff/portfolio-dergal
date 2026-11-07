@@ -21,14 +21,16 @@ export default function Hero() {
           ease: 'power4.out',
           delay: 0.15,
         })
-        // La photo se dévoile de haut en bas (balayage) en tombant légèrement
+        // Transition au chargement (sans scroll) : la photo se dévoile de haut
+        // en bas puis se pose — le masque en bas dissout le bord du détourage
         gsap.fromTo(
           '[data-hero-photo]',
-          { clipPath: 'inset(0% 0% 100% 0%)', y: -50 },
+          { clipPath: 'inset(0% 0% 100% 0%)', y: -50, scale: 1.06 },
           {
             clipPath: 'inset(0% 0% 0% 0%)',
             y: 0,
-            duration: 1.25,
+            scale: 1,
+            duration: 1.3,
             ease: 'power3.out',
             delay: 0.45,
           },
@@ -63,7 +65,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="accueil" ref={root} className="relative min-h-screen">
+    <section id="accueil" ref={root} className="relative min-h-screen overflow-hidden">
       {/* Nom géant — fixe derrière tout, comme sur zendaya.com */}
       <div
         data-title
@@ -78,14 +80,21 @@ export default function Hero() {
       </div>
 
       {/* Contenu qui défile par-dessus le nom */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center px-6 pt-[9vh] pb-14 sm:pt-[12vh]">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-24">
         <img
           data-hero-photo
           src="/arturo.png"
           alt="Arturo Dergal"
           width="200"
           height="200"
-          className="w-[min(96vw,880px)] select-none rounded-2xl"
+          className="w-[min(115vw,880px)] max-w-none select-none rounded-2xl"
+          style={{
+            // Le bas du détourage se dissout dans le fond : plus de coupure nette
+            maskImage:
+              'linear-gradient(to bottom, #000 0%, #000 82%, transparent 100%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, #000 0%, #000 82%, transparent 100%)',
+          }}
         />
       </div>
     </section>
